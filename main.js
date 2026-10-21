@@ -88,3 +88,23 @@ if (req.method === 'GET') {
   res.writeHead(200, { 'Content-Type': 'image/jpeg' });
   return res.end(image);
 }
+
+if (req.method === 'PUT') {
+  const chunks = [];
+
+  for await (const chunk of req) {
+    chunks.push(chunk);
+  }
+
+  const image = Buffer.concat(chunks);
+
+  if (image.length === 0) {
+    res.writeHead(400);
+    return res.end('Empty request body');
+  }
+
+  await writeFile(file, image);
+
+  res.writeHead(201);
+  return res.end('Image saved');
+}
