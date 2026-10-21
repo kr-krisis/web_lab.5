@@ -124,3 +124,18 @@ if (req.method === 'DELETE') {
   res.writeHead(200);
   return res.end('Image deleted');
 }
+
+res.setHeader('Allow', 'GET, PUT, DELETE');
+res.writeHead(405);
+return res.end('Method not allowed');
+
+} catch (error) {
+  console.error(error.message);
+
+  if (!res.headersSent) {
+    res.writeHead(500);
+    return res.end('Internal server error');
+  }
+
+  res.destroy();
+}
