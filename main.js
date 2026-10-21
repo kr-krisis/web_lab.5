@@ -108,3 +108,19 @@ if (req.method === 'PUT') {
   res.writeHead(201);
   return res.end('Image saved');
 }
+
+if (req.method === 'DELETE') {
+  try {
+    await unlink(file);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      res.writeHead(404);
+      return res.end('Image not found in cache');
+    }
+
+    throw error;
+  }
+
+  res.writeHead(200);
+  return res.end('Image deleted');
+}
