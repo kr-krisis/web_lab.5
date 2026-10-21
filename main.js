@@ -37,3 +37,54 @@ async function startServer() {
   server.listen(port, host);
   console.log(`Проксі-сервер запущено: http://${host}:${port}`);
 }
+
+const match = /^\/(\d{3})$/.exec(
+  new URL(req.url, 'http://localhost').pathname
+);
+
+if (!match) {
+  res.writeHead(404);
+  return res.end('Invalid image path');
+}
+
+const code = Number(match[1]);
+
+if (code < 100 || code > 599) {
+  res.writeHead(404);
+  return res.end('Invalid status code');
+}
+
+const file = join(cacheDir, `${code}.jpg`);
+
+if (req.method === 'GET') {
+  let image;
+
+  try {
+    image = await readFile(file);
+    res.setHeader('X-Cache', 'HIT');
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+
+    try {
+      const response = await superagent
+        .get(`https://http.cat/${code}`)
+        .buffer(true);
+
+      image = response.body;
+
+      if (!Buffer.isBuffer(image) || image.length === 0) {
+        res.writeHead(404);
+        return res.end('Image not found');
+      }
+
+      await writeFile(file, image);
+      res.setHeader('X-Cache', 'MISS');
+    } catch {
+      res.writeHead(404);
+      return res.end('Image not found on http.cat');
+    }
+  }
+
+  res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+  return res.end(image);
+}
