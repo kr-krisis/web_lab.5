@@ -2,9 +2,9 @@
   "name": "web_lab.5",
   "version": "1.0.0",
   "description": "Node.js-proxy",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node main.js"
   },
   "repository": {
     "type": "git",
@@ -13,13 +13,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/kr-krisis/web_lab.5/issues"
   },
   "homepage": "https://github.com/kr-krisis/web_lab.5#readme",
   "dependencies": {
-    "commander": "^15.0.0",
-    "superagent": "^10.4.1"
+    "commander": "^15.1.0",
+    "superagent": "^10.4.2"
   }
 }
