@@ -1,0 +1,13 @@
+$kind: http-request
+name: 5. DELETE /418
+url: "{{baseUrl}}/418"
+method: DELETE
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Код стану 200\", () => {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });"
+    language: text/javascript
+order: 4000

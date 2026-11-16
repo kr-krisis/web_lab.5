@@ -1,0 +1,13 @@
+$kind: http-request
+name: 7. GET /999 (неіснуючий код)
+url: "{{baseUrl}}/999"
+method: GET
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Код стану 404\", () => {\r
+
+      \    pm.response.to.have.status(404);\r
+
+      });"
+    language: text/javascript
+order: 2000

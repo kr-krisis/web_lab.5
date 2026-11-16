@@ -7,7 +7,7 @@ import superagent from 'superagent';
 const program = new Command();
 
 program
-  .helpOption(false)
+  .helpOption('-?, --help', 'показ довідки')
   .requiredOption('-h, --host <address>', 'адреса сервера')
   .requiredOption('-p, --port <number>', 'порт сервера', Number)
   .requiredOption('-c, --cache <path>', 'тека кешу');
@@ -24,6 +24,7 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) {
   await startServer();
 }
 
+// створення теки кешу перед запуском HTTP-сервера
 async function startServer() {
   await mkdir(cacheDir, { recursive: true });
 
@@ -34,6 +35,7 @@ async function startServer() {
         return sendError(res, 405, 'Method not allowed');
       }
 
+      // масив з 2-х елементів
       const match = /^\/(\d{3})$/.exec(
         new URL(req.url, 'http://localhost').pathname
       );

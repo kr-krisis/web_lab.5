@@ -1,0 +1,17 @@
+$kind: http-request
+name: 3. PUT /418 (власна картинка)
+url: "{{baseUrl}}/418"
+method: PUT
+body:
+  type: file
+  content:
+    src: /C:/Users/MainUser/Documents/LNU/2_year/web/lab_5/web_lab.5/my_cat_image.jpg
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Код стану 200 або 201\", () => {\r
+
+      \    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r
+
+      });"
+    language: text/javascript
+order: 6000
